@@ -1,0 +1,31 @@
+version: "3.3"
+
+services:
+  postgres:
+    image: postgres:12.1-alpine
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data/pgdata
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+
+  backend:
+    build: ../todo-list-coopeuch-backend
+    container_name: backend-coopeuch-compose
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build: ../todo-list-coopeuch-frontend
+    container_name: frontend-coopeuch-compose
+    restart: always
+    ports:
+      - "3000:80"
